@@ -6,18 +6,20 @@ class Order extends React.Component{
         const fish = this.props.fishes[key];
         const amount = this.props.order[key];
         const isAvailable = fish && fish.status === 'available';
+
+        // Catch when fishes are not loaded.
+        if(!fish) return null;
+
         if(!isAvailable){
-            return <li>
+            return <li key={key}>
                 Sorry {fish ? fish.name : 'fish'} is no longer available
             </li>
         }
-        else {
-            return <li key={key}>
-                {amount} lbs. {fish.name}
 
-                {formatPrice(amount * fish.price)}
-            </li>
-        }
+        return <li key={key}>
+            <p className="count">{amount} lbs.</p>{fish.name}
+           <p className="price">{formatPrice(amount * fish.price)}</p>
+        </li>
     }
 
     render(){
@@ -36,14 +38,18 @@ class Order extends React.Component{
         return (
             <div className="order-warp">
                 <h2>Order</h2>
-                <ul>
+                <div className="total">
+                    Total:&nbsp;
+                    <strong>{formatPrice(total)}</strong>
+                </div>
+                <ul className="order">
                     {orderIds.map(key =>
                         this.renderOrder(key)
                     )}
                 </ul>
                 <div className="total">
                     Total:&nbsp;
-                    <strong>{formatPrice(total)}</strong>
+                    <strong className="price">{formatPrice(total)}</strong>
                 </div>
             </div>
        )
